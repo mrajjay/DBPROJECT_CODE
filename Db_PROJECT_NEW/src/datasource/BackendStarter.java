@@ -30,7 +30,7 @@ public class BackendStarter {
 		String id2 = studentCRUDoperations.addStudent("Meghana", "mraj",
 				"1234", "Avent Ferry Road", "9195799941", 0, 1, 1234, 0);
 		String id3 = studentCRUDoperations.addStudent("Shreesha", "srrao",
-				"12345", "Avent Ferry Road", "9195799942", 0, 1, 12345, 0);
+				"12345", "Raleigh", "9195799942", 0, 1, 12345, 0);
 		DoctorCRUDoperations doctorCRUDoperations = (DoctorCRUDoperations) context
 				.getBean("doctorEntity");
 
