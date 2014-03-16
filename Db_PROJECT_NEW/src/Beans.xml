@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd ">
+
+   <!-- Initialization for data source -->
+   <bean id="dataSource" 
+      class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+      <property name="url" value="jdbc:oracle:thin:@ora.csc.ncsu.edu:1521:orcl"/>
+      <property name="username" value="srao5"/>
+      <property name="password" value="200014880"/>
+   </bean>
+
+ <bean id="truncate" 
+      class="utility.TruncateTables">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+ 
+   <bean id="studentEntity" 
+      class="mainEntities.StudentCRUDoperations">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+   <bean id="doctorEntity" 
+      class="mainEntities.DoctorCRUDoperations">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+   <bean id="nurseEntity" 
+      class="mainEntities.NurseCRUDoperations">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+   <bean id="appointmentEntity" 
+      class="operations.AppointmentCRUDoperations">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+   <bean id="billingEntity" 
+      class="operations.BillingCRUDoperations">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+    <bean id="medicalRecordEntity" 
+      class="mainEntities.MedicalRecordCRUDoperations">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+      
+</beans>
