@@ -14,10 +14,11 @@ public class StudentMapper implements RowMapper<Student> {
 		student.setHealthInsuranceNumber(rs.getInt("HealthInsuranceNumber"));
 		student.setLoginId(rs.getString("LoginId"));
 		student.setLoginPassword(rs.getString("LoginPassword"));
-		student.setOutstandingPayments(rs.getFloat("OutstandingPayments"));
+		student.setOutstandingPayments(rs.getDouble("OutstandingPayments"));
 		student.setPendingVaccinationCount(rs.getInt("PendingVaccinationCount"));
 		student.setPhoneNumber(rs.getString("PhoneNumber"));
-
+		student.setHealthInsuranceCompanyName(rs.getString("HealthInsuranceCompany"));
+		student.setDeductablePaidInFull(rs.getString("DeductablePaidInFull"));
 		return student;
 	}
 }

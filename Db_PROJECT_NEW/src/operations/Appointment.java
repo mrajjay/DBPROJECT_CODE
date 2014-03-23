@@ -1,6 +1,5 @@
 package operations;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -26,34 +25,35 @@ public class Appointment {
 	public void setStartTime(String amORpm, Date date) {
 		SimpleDateFormat printFormat = new SimpleDateFormat("HH:mm:ss");
 		this.startTime = printFormat.format(date) + " " + amORpm;
-		setEndTime(amORpm, date);
+		// setEndTime(amORpm, date);
 	}
-	
+
 	public void setStartTime(String StartTime) {
-	
+
 		this.startTime = StartTime;
-	
+		//setEndTime(StartTime);
+
 	}
 
 	public String getEndTime() {
 		return endTime;
 	}
-	
-	public void setEndTime(String EndTime) {
-		
-		this.endTime = EndTime;
-	}
-	
-	
 
-	public void setEndTime(String amORpm, Date date) {
+	public void setEndTime(String timeString) {
 		// All appointmetns are for a max of 1hr.
 		SimpleDateFormat printFormat = new SimpleDateFormat("HH:mm:ss");
-		String tempEndTime = printFormat.format(date);
-		String[] time = tempEndTime.split(":");
+		String tempEndTime[] = timeString.split("[ ]");
+		String[] time = tempEndTime[0].split("[:]");
+		String amORpm = tempEndTime[1];
 
-		String ampm = (time[0].contains("11") ? ((amORpm == "AM") ? "PM" : "AM")
-				: amORpm);
+		String ampm = null;
+		if (time[0].equals("11")) {
+			if (amORpm.contains("AM") ){
+				ampm = "PM";
+			} else
+				ampm = "AM";
+		} else
+			ampm = amORpm;
 		time[0] = String.valueOf((Integer.parseInt(time[0]) + 1) % 12);
 		time[0] = time[0].equals("0") ? "12" : time[0];
 		this.endTime = ("" + Arrays.asList(time)).replaceAll("(^.|.$)", "")
@@ -65,28 +65,22 @@ public class Appointment {
 		return apptdate;
 	}
 
-	public void setDate(String date,int doConvversion) {
-		if(doConvversion==1)
-		{
-		SimpleDateFormat formatter = new SimpleDateFormat(
-				"EEEE, MMM dd, yyyy HH:mm:ss aa");
-		// String dateInString = "Friday, Jun 7, 2013 12:10:56 PM";
-		Date tempDate = null;
+	public void setDate(String date, int doConvversion) {
+		/*
+		 * if(doConvversion==1) { SimpleDateFormat formatter = new
+		 * SimpleDateFormat( "EEEE, MMM dd, yyyy HH:mm:ss aa"); // String
+		 * dateInString = "Friday, Jun 7, 2013 12:10:56 PM"; Date tempDate =
+		 * null;
+		 * 
+		 * try { tempDate = formatter.parse(date); this.apptdate =
+		 * tempDate.toString(); } catch (java.text.ParseException e) {
+		 * e.printStackTrace(); } String[] datecomponents = date.split(" ");
+		 * 
+		 * setStartTime(datecomponents[datecomponents.length - 1], tempDate); }
+		 * else { this.apptdate=date; }
+		 */
 
-		try {
-			tempDate = formatter.parse(date);
-			this.apptdate = tempDate.toString();
-		} catch (java.text.ParseException e) {
-			e.printStackTrace();
-		}
-		String[] datecomponents = date.split(" ");
-
-		setStartTime(datecomponents[datecomponents.length - 1], tempDate);
-		}
-		else
-		{
-			this.apptdate=date;
-		}
+		this.apptdate = date;
 
 	}
 
@@ -121,8 +115,11 @@ public class Appointment {
 	public void setAppointmentId(Integer appointmentId) {
 		this.appointmentId = appointmentId;
 	}
-	 public String toString() {
-	        return String.format("Appointment[%d, %s, %s, %s, %s, %s, %s]", appointmentId, studentId,doctorId,apptdate,startTime,endTime,reason);
-	    }
+
+	public String toString() {
+		return String.format("Appointment[%d, %s, %s, %s, %s, %s, %s]",
+				appointmentId, studentId, doctorId, apptdate, startTime,
+				endTime, reason);
+	}
 
 }

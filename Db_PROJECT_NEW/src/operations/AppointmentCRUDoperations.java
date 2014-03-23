@@ -1,25 +1,36 @@
 package operations;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import mainEntities.DoctorCRUDoperations;
 import datasource.DataSourceDefenition;
 
 public class AppointmentCRUDoperations extends DataSourceDefenition {
 
 	public static int appointmentId = 1;
 
-	public int makeAppointment(String studentId, String doctorId, String date,
+	public int makeAppointment(String studentId, String doctorId, String date,String StartTime,
 			String Reason)
 
 	{
 		Appointment appointment = new Appointment();
 		appointment.setStudentId(studentId);
 		appointment.setDoctorId(doctorId);
-		appointment.setDate(date, 1);
+		appointment.setDate(date, 1);  //  mm/dd/yyyy format
 		appointment.setReason(Reason);
+        String SQL = "select count(*) from Appointment";
+		
+		int appointmentId = jdbcTemplateObject.queryForInt(SQL);
 		appointment.setAppointmentId(appointmentId++);
-		String SQL = "insert into Appointment (AppointmentId,StudentId,DoctorId,AppointmentDate,StartTime,EndTime,Reason) values (?,?,?,?,?,?,?)";
+		appointment.setStartTime(StartTime);
+		appointment.setEndTime(StartTime);
+		 SQL = "insert into Appointment (AppointmentId,StudentId,DoctorId,AppointmentDate,StartTime,EndTime,Reason) values (?,?,?,?,?,?,?)";
 
 		jdbcTemplateObject.update(
 				SQL,
@@ -28,6 +39,10 @@ public class AppointmentCRUDoperations extends DataSourceDefenition {
 						appointment.getDate(), appointment.getStartTime(),
 						appointment.getEndTime(), appointment.getReason() });
 
+		DoctorCRUDoperations dco=new DoctorCRUDoperations();
+		dco.updateAvailability(appointment.getDoctorId(), appointment.getDate(),appointment.getStartTime(),"DELETE");
+		
+		
 		return appointment.getAppointmentId();
 	}
 
@@ -35,11 +50,18 @@ public class AppointmentCRUDoperations extends DataSourceDefenition {
 
 	{
 
-		String SQL = "delete from Appointment where AppointmentId = ?";
-
+		String SQL = "select * from Appointment where AppointmentId = ?";
+		Appointment appointment = jdbcTemplateObject.queryForObject(SQL,
+				new Object[] { Integer.parseInt(AppointmentId) },
+				new AppointmentMapper());
+		SQL = "delete from Appointment where AppointmentId = ?";
 		jdbcTemplateObject.update(SQL,
 				new Object[] { Integer.parseInt(AppointmentId) });
+		
+		DoctorCRUDoperations dco=new DoctorCRUDoperations();
+		dco.updateAvailability(appointment.getDoctorId(), appointment.getDate(),appointment.getStartTime(),"ADD");
 		System.out.println("Appointment Cancelled");
+		
 		return true;
 	}
 
@@ -62,11 +84,85 @@ public class AppointmentCRUDoperations extends DataSourceDefenition {
 		Iterator<Appointment>appointment =appointments.iterator();
 		while(appointment.hasNext())
 		{
-			if(appointment.next().getDoctorId().equalsIgnoreCase(StudentId))
+			if(appointment.next().getStudentId().equalsIgnoreCase(StudentId))
 				continue;
 			appointment.remove();
 		}
 			return appointments;
+
+	}
+	  public int compareTime(String currentTime, String appTIme) { 
+	    	 
+	    	 String temp1[]=currentTime.split("[ ]" );
+	    	 System.out.println(currentTime);
+	    	 System.out.println(appTIme);
+	    	 String temp2[]=appTIme.split("[ ]");
+	    	 if(temp1[1].equalsIgnoreCase(temp2[1]))
+	    	 {
+	    		 String temp3[]=temp1[0].split("[:]");
+	    		 String temp4[]=temp2[0].split("[:]");
+	    		 Integer number1=Integer.parseInt(temp3[0]);
+	    		 if(number1==12)number1=0;
+	    		 Integer number2=Integer.parseInt(temp4[0]);
+	    		 if(number2==12)number2=0;
+	    		 if(number1<number2)return 0;
+	    		 else if(number1 >number2)
+	    		 return 1;
+	    		 else
+	    		 {
+	    			 
+	    		Integer number3=Integer.parseInt(temp3[1]);
+	    		Integer number4=Integer.parseInt(temp4[1]);
+	    		 if(number3<number4)return 0;
+	    		 else return 1;//revisit
+	    		
+	    		 }
+	    	 }
+	    	 else if(temp1[1].equalsIgnoreCase("AM") && temp2[1].equalsIgnoreCase("PM")) return 0;
+	    	 return 1;
+	    	 
+	    	 }
+public List<Appointment> retirvePassedAppointmentsOfStudent(String StudentId) {
+
+		
+		String SQL = "select * from Appointment";
+		List <Appointment> appointments = jdbcTemplateObject.query(SQL,new AppointmentMapper());
+		ArrayList <Appointment>pastAppointments= new ArrayList<Appointment>();
+		Iterator<Appointment>appointment =appointments.iterator();
+		while(appointment.hasNext())
+		{
+			if(appointment.next().getStudentId().equalsIgnoreCase(StudentId))
+				continue;
+			appointment.remove();
+		}
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		Date date = new Date();
+		SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm a");
+		String currentTime = sdfTime.format(date);
+		String temp=dateFormat.format(date);
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+    	try {
+			Date currentDate = sdf.parse(temp);
+			for(Appointment app:appointments)
+			{
+				Date appdate = sdf.parse(app.getDate());
+				if(currentDate.compareTo(appdate)>0){
+					pastAppointments.add(app);
+					        		
+	        	}else if(currentDate.compareTo(appdate)==0){
+	        	
+	        		if(compareTime(currentTime,app.getStartTime())==1)
+	        			pastAppointments.add(app);
+	        	}
+				
+			}
+			
+		} catch (ParseException e) {
+			
+			e.printStackTrace();
+		}
+		
+			return pastAppointments;
 
 	}
 	

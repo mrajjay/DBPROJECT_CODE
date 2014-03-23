@@ -14,7 +14,25 @@ public class Student {
 
 	int HealthInsuranceNumber;
 
-	float OutstandingPayments;
+	double OutstandingPayments;
+	String HealthInsuranceCompanyName;
+	String DeductablePaidInFull;
+
+	public String getDeductablePaidInFull() {
+		return DeductablePaidInFull;
+	}
+
+	public void setDeductablePaidInFull(String deductablePaidInFull) {
+		DeductablePaidInFull = deductablePaidInFull;
+	}
+
+	public String getHealthInsuranceCompanyName() {
+		return HealthInsuranceCompanyName;
+	}
+
+	public void setHealthInsuranceCompanyName(String healthInsuranceCompanyName) {
+		HealthInsuranceCompanyName = healthInsuranceCompanyName;
+	}
 
 	public Student() {
 	}
@@ -83,12 +101,12 @@ public class Student {
 		HealthInsuranceNumber = healthInsuranceNumber;
 	}
 
-	public float getOutstandingPayments() {
+	public double getOutstandingPayments() {
 		return OutstandingPayments;
 	}
 
-	public void setOutstandingPayments(float outstandingPayments) {
-		OutstandingPayments = outstandingPayments;
+	public void setOutstandingPayments(double d) {
+		OutstandingPayments = d;
 	}
 
 }

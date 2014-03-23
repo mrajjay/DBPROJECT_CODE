@@ -16,7 +16,7 @@ public class DoctorMapper implements RowMapper<Doctor> {
 
 		doctor.setPhoneNumber(rs.getString("PhoneNumber"));
 		doctor.setSpecialization(rs.getString("Specialization"));
-		doctor.setAvailability(rs.getString("Availability"));
+	
 		return doctor;
 	}
 }

@@ -2,29 +2,50 @@ package operations;
 
 import java.util.List;
 
+import mainEntities.Student;
+import mainEntities.StudentCRUDoperations;
+
 import datasource.DataSourceDefenition;
 
 public class BillingCRUDoperations extends DataSourceDefenition {
 
-	public static int billingId = 1;
-
-	public int makeBilling(String studentId, String date, String CreditCardNo, String Expiry, String DoctorId)
+	
+	public double getBillAmount(String studentId,String Reason)
 	{
-		//TBD: Need to decide the copayment amount and the amount based on the doctor by maintaining a map of Doctor - Amount
+	
+		Student stu = new StudentCRUDoperations().getStudent(studentId);
+		stu.setOutstandingPayments(new CoPayCRUDoperations().getCoPayDetails(stu.getHealthInsuranceCompanyName(), new ReasonSpecializationCRUDoperations().getFees(Reason)));
+		return stu.getOutstandingPayments();
+		
+	}
+
+	public int makeBilling(String studentId, String date, String CreditCardNo, String Expiry, String Reason,double amount)
+	{
+		
+		Student stu = new StudentCRUDoperations().getStudent(studentId);
+		
 		Billing bill = new Billing();
 		bill.setStudentId(studentId);
 		//bill.setDoctorId(doctorId);
 		bill.setDate(date, 1);
 		bill.setcreditCardNumber(CreditCardNo);
 		bill.setcreditCardExpiry(Expiry);
-		bill.setBillingId(billingId++);
-		String SQL = "insert into Billing (BillingId,StudentId,DateAdded,Amount,CreditCardNumber,CreditCardExpiry,CopaymentAmount) values (?,?,?,?,?,?,?)";
+		
+		String SQL = "select count(*) from Billing";
+		
+		int billingIndex = jdbcTemplateObject.queryForInt(SQL);
+		bill.setBillingId(billingIndex++);
+		bill.setbillingAmount(new ReasonSpecializationCRUDoperations().getFees(Reason));
+		bill.setcopaymentamt(amount);
+		SQL = "insert into Billing (BillingId,StudentId,DateAdded,Amount,CreditCardNumber,CreditCardExpiry,CopaymentAmount) values (?,?,?,?,?,?,?)";
 
 		jdbcTemplateObject.update(
 				SQL,
 				new Object[] { bill.getBillingId(),bill.getStudentId(), bill.getDate(),
-						bill.getDate(), bill.getbillingAmount(), bill.getcreditCardNumber(), bill.getcreditCardExpiry() });
+						 bill.getbillingAmount(), bill.getcreditCardNumber(), bill.getcreditCardExpiry(),bill.getcopaymentamt() });
 
+		stu.setOutstandingPayments(stu.getOutstandingPayments()+amount);
+		new StudentCRUDoperations().updateOutstandingPayment(stu.getLoginId(), (float)stu.getOutstandingPayments());
 		return bill.getBillingId();
 	}
 	

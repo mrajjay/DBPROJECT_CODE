@@ -10,7 +10,7 @@ public class Doctor {
 	String address;
 	String phoneNumber;
 	String specialization;
-	String availability;
+	
 	
 	public Doctor(){
 		
@@ -52,11 +52,6 @@ public class Doctor {
 	public void setSpecialization(String specialization) {
 		this.specialization = specialization;
 	}
-	public String getAvailability() {
-		return availability;
-	}
-	public void setAvailability(String availability) {
-		this.availability = availability;
-	}
+	
 
 }

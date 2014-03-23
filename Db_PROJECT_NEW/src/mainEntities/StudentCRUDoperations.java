@@ -17,14 +17,14 @@ public class StudentCRUDoperations extends DataSourceDefenition{
 	public  String addStudent(String Name, 
 			String LoginId, String LoginPassword, String Address,
 			String PhoneNumber, int FreePhysicalCount,
-			int PendingVaccinationCount, int HealthInsuranceNumber, float OutstandingPayments) {
+			int PendingVaccinationCount, int HealthInsuranceNumber, float OutstandingPayments,String HealthInsuranceCompany,String DeductablePaidInFull) {
 
-		String SQL = "insert into Student (Name,LoginId,LoginPassword,Address,PhoneNumber,FreePhysicalCount,PendingVaccinationCount,HealthInsuranceNumber,OutstandingPayments) values (?,?,?,?,?,?,?,?,?)";
+		String SQL = "insert into Student (Name,LoginId,LoginPassword,Address,PhoneNumber,FreePhysicalCount,PendingVaccinationCount,HealthInsuranceNumber,OutstandingPayments,HealthInsuranceCompany,DeductablePaidInFull) values (?,?,?,?,?,?,?,?,?,?,?)";
 
 		jdbcTemplateObject.update(SQL, new Object[] { Name, 
 				LoginId, LoginPassword, Address, PhoneNumber,
 				FreePhysicalCount, PendingVaccinationCount,
-				HealthInsuranceNumber, OutstandingPayments });
+				HealthInsuranceNumber, OutstandingPayments,HealthInsuranceCompany,DeductablePaidInFull });
 		System.out.println("Created Record Name = " + Name + " LoginId = "
 				+ LoginId);
 		return LoginId;

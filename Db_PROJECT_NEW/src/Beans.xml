@@ -42,5 +42,13 @@
       class="mainEntities.MedicalRecordCRUDoperations">
       <property name="dataSource"  ref="dataSource" />    
    </bean>
+    <bean id="copayEntity" 
+      class="operations.CoPayCRUDoperations">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
+    <bean id="reasonEntity" 
+      class="operations.ReasonSpecializationCRUDoperations">
+      <property name="dataSource"  ref="dataSource" />    
+   </bean>
       
 </beans>

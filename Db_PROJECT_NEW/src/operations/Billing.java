@@ -8,8 +8,8 @@ public class Billing {
 	String studentId;
 	Integer billingId;
 	String billingdate;
-	float copaymentamt;
-	float billingAmount;
+	double copaymentamt;
+	double billingAmount;
 	String creditCardNumber;
 	String creditCardExpiry;
 	
@@ -39,7 +39,7 @@ public class Billing {
 	}
 
 	public void setDate(String date,int doConvversion) {
-		if(doConvversion==1)
+		/*if(doConvversion==1)
 		{
 		SimpleDateFormat formatter = new SimpleDateFormat(
 				"EEEE, MMM dd, yyyy HH:mm:ss aa");
@@ -57,23 +57,24 @@ public class Billing {
 		else
 		{
 			this.billingdate=date;
-		}
+		}*/
+		this.billingdate=date;
 
 	}
 
-	public float getcopaymentamt() {
+	public double getcopaymentamt() {
 		return copaymentamt;
 	}
 
-	public void setcopaymentamt(float copaymentamt) {
-		this.copaymentamt = copaymentamt;
+	public void setcopaymentamt(double d) {
+		this.copaymentamt = d;
 	}
 	
-	public float getbillingAmount() {
+	public double getbillingAmount() {
 		return billingAmount;
 	}
 
-	public void setbillingAmount(float billingAmount) {
+	public void setbillingAmount(double billingAmount) {
 		this.billingAmount = billingAmount;
 	}
 	
