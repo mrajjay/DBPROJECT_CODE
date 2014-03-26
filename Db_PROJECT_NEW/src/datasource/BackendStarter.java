@@ -36,9 +36,12 @@ public class BackendStarter {
 		appointmentOperations.retirvePassedAppointmentsOfStudent("srrao1");
 		BillingCRUDoperations bco= (BillingCRUDoperations) context
 				.getBean("billingEntity");
-		double amount=bco.getBillAmount("kmysore", "Chest Pain");
-		bco.makeBilling("kmysore", "03/17/2014", "222000222", "09/12", "Chest Pain", amount);
-
+		double amount=bco.getBillAmount("kmysore", "General Medical Problems");
+		int billingId=bco.makeBilling("kmysore", "03/28/2014", "222000222", "09/12", "General Medical Problems", amount);
+		Integer id=appointmentOperations.makeAppointment("kmysore", "paul",
+				"03/28/2014","10:00 AM", "Chest Pain",billingId);
+		 appointmentOperations.cancelAppointment(id.toString());
+		//appointmentOperations.cancelAppointment("4");
 		/*String id1 = studentCRUDoperations.addStudent("Karthik", "kmysore1",
 				"123", "Avent Ferry Road", "9195799940", 0, 0, 123, 0,"Acme","NO");
 		String id2 = studentCRUDoperations.addStudent("Meghana", "mraj1",

@@ -16,7 +16,7 @@ public class AppointmentCRUDoperations extends DataSourceDefenition {
 	public static int appointmentId = 1;
 
 	public int makeAppointment(String studentId, String doctorId, String date,String StartTime,
-			String Reason)
+			String Reason,int BillingId)
 
 	{
 		Appointment appointment = new Appointment();
@@ -24,20 +24,21 @@ public class AppointmentCRUDoperations extends DataSourceDefenition {
 		appointment.setDoctorId(doctorId);
 		appointment.setDate(date, 1);  //  mm/dd/yyyy format
 		appointment.setReason(Reason);
-        String SQL = "select count(*) from Appointment";
+		appointment.setBillingId(BillingId);
+        String SQL = "select MAX(AppointmentId) from Appointment";
 		
 		int appointmentId = jdbcTemplateObject.queryForInt(SQL);
-		appointment.setAppointmentId(appointmentId++);
+		appointment.setAppointmentId(++appointmentId);
 		appointment.setStartTime(StartTime);
 		appointment.setEndTime(StartTime);
-		 SQL = "insert into Appointment (AppointmentId,StudentId,DoctorId,AppointmentDate,StartTime,EndTime,Reason) values (?,?,?,?,?,?,?)";
+		 SQL = "insert into Appointment (AppointmentId,StudentId,DoctorId,AppointmentDate,StartTime,EndTime,Reason,BillingId) values (?,?,?,?,?,?,?,?)";
 
 		jdbcTemplateObject.update(
 				SQL,
 				new Object[] { appointment.getAppointmentId(),
 						appointment.getStudentId(), appointment.getDoctorId(),
 						appointment.getDate(), appointment.getStartTime(),
-						appointment.getEndTime(), appointment.getReason() });
+						appointment.getEndTime(), appointment.getReason(),appointment.getBillingId() });
 
 		DoctorCRUDoperations dco=new DoctorCRUDoperations();
 		dco.updateAvailability(appointment.getDoctorId(), appointment.getDate(),appointment.getStartTime(),"DELETE");
@@ -60,6 +61,8 @@ public class AppointmentCRUDoperations extends DataSourceDefenition {
 		
 		DoctorCRUDoperations dco=new DoctorCRUDoperations();
 		dco.updateAvailability(appointment.getDoctorId(), appointment.getDate(),appointment.getStartTime(),"ADD");
+		if(appointment.billingId!=-1)
+		BillingCRUDoperations.deleteBill(appointment.getBillingId().toString());
 		System.out.println("Appointment Cancelled");
 		
 		return true;
@@ -93,17 +96,17 @@ public class AppointmentCRUDoperations extends DataSourceDefenition {
 	}
 	  public int compareTime(String currentTime, String appTIme) { 
 	    	 
-	    	 String temp1[]=currentTime.split("[ ]" );
-	    	 System.out.println(currentTime);
-	    	 System.out.println(appTIme);
-	    	 String temp2[]=appTIme.split("[ ]");
-	    	 if(temp1[1].equalsIgnoreCase(temp2[1]))
+	    	 String temp1[]=currentTime.trim().split("[ ]" );
+	    	 System.out.println(currentTime.trim());
+	    	 System.out.println(appTIme.trim());
+	    	 String temp2[]=appTIme.trim().split("[ ]");
+	    	 if(temp1[1].trim().equalsIgnoreCase(temp2[1].trim()))
 	    	 {
-	    		 String temp3[]=temp1[0].split("[:]");
-	    		 String temp4[]=temp2[0].split("[:]");
-	    		 Integer number1=Integer.parseInt(temp3[0]);
+	    		 String temp3[]=temp1[0].trim().split("[:]");
+	    		 String temp4[]=temp2[0].trim().split("[:]");
+	    		 Integer number1=Integer.parseInt(temp3[0].trim());
 	    		 if(number1==12)number1=0;
-	    		 Integer number2=Integer.parseInt(temp4[0]);
+	    		 Integer number2=Integer.parseInt(temp4[0].trim());
 	    		 if(number2==12)number2=0;
 	    		 if(number1<number2)return 0;
 	    		 else if(number1 >number2)
@@ -111,14 +114,14 @@ public class AppointmentCRUDoperations extends DataSourceDefenition {
 	    		 else
 	    		 {
 	    			 
-	    		Integer number3=Integer.parseInt(temp3[1]);
-	    		Integer number4=Integer.parseInt(temp4[1]);
+	    		Integer number3=Integer.parseInt(temp3[1].trim());
+	    		Integer number4=Integer.parseInt(temp4[1].trim());
 	    		 if(number3<number4)return 0;
 	    		 else return 1;//revisit
 	    		
 	    		 }
 	    	 }
-	    	 else if(temp1[1].equalsIgnoreCase("AM") && temp2[1].equalsIgnoreCase("PM")) return 0;
+	    	 else if(temp1[1].trim().equalsIgnoreCase("AM") && temp2[1].trim().equalsIgnoreCase("PM")) return 0;
 	    	 return 1;
 	    	 
 	    	 }

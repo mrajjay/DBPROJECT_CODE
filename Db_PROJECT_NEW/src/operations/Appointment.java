@@ -13,6 +13,14 @@ public class Appointment {
 	String startTime;
 	String endTime;
 	String reason;
+	Integer billingId;
+	public Integer getBillingId() {
+		return billingId;
+	}
+
+	public void setBillingId(Integer billingId) {
+		this.billingId = billingId;
+	}
 
 	public Appointment() {
 

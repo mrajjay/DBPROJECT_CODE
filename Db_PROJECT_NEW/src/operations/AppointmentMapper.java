@@ -15,7 +15,7 @@ public class AppointmentMapper implements RowMapper<Appointment> {
 	   appointment.setDoctorId(rs.getString("DoctorId"));
 	   appointment.setReason(rs.getString("Reason"));
 	   appointment.setStudentId(rs.getString("StudentId"));
-        
+	   appointment.setBillingId(rs.getInt("BillingId"));
 		
       return appointment;
    }

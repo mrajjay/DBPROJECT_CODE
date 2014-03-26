@@ -170,14 +170,14 @@ public class DoctorCRUDoperations extends DataSourceDefenition {
 			     @Override 
 			     public int compare(String time1, String time2) { 
 			    	 
-			    	 String temp1[]=time1.split("[ ]" );
-			    	 System.out.println(time1);
-			    	 System.out.println(time2);
-			    	 String temp2[]=time2.split("[ ]");
-			    	 if(temp1[1].equalsIgnoreCase(temp2[1]))
+			    	 String temp1[]=time1.trim().split("[ ]" );
+			    	 System.out.println(time1.trim());
+			    	 System.out.println(time2.trim());
+			    	 String temp2[]=time2.trim().split("[ ]");
+			    	 if(temp1[1].trim().equalsIgnoreCase(temp2[1].trim()))
 			    	 {
-			    		 String temp3[]=temp1[0].split("[:]");
-			    		 String temp4[]=temp2[0].split("[:]");
+			    		 String temp3[]=temp1[0].trim().split("[:]");
+			    		 String temp4[]=temp2[0].trim().split("[:]");
 			    		 Integer number1=Integer.parseInt(temp3[0]);
 			    		 if(number1==12)number1=0;
 			    		 Integer number2=Integer.parseInt(temp4[0]);
@@ -185,7 +185,7 @@ public class DoctorCRUDoperations extends DataSourceDefenition {
 			    		 if(number1<number2)return 0;
 			    		 return 1;
 			    	 }
-			    	 else if(temp1[1].equalsIgnoreCase("AM") && temp2[1].equalsIgnoreCase("PM")) return 0;
+			    	 else if(temp1[1].trim().equalsIgnoreCase("AM") && temp2[1].trim().equalsIgnoreCase("PM")) return 0;
 			    	 return 1;
 			    	 
 			    	 }

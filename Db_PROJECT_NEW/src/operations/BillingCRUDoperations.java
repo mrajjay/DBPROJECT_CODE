@@ -14,6 +14,7 @@ public class BillingCRUDoperations extends DataSourceDefenition {
 	{
 	
 		Student stu = new StudentCRUDoperations().getStudent(studentId);
+		if(stu.getDeductablePaidInFull()=="YES") return 0;
 		stu.setOutstandingPayments(new CoPayCRUDoperations().getCoPayDetails(stu.getHealthInsuranceCompanyName(), new ReasonSpecializationCRUDoperations().getFees(Reason)));
 		return stu.getOutstandingPayments();
 		
@@ -23,7 +24,7 @@ public class BillingCRUDoperations extends DataSourceDefenition {
 	{
 		
 		Student stu = new StudentCRUDoperations().getStudent(studentId);
-		
+		if(stu.getDeductablePaidInFull()=="YES")return -1;
 		Billing bill = new Billing();
 		bill.setStudentId(studentId);
 		//bill.setDoctorId(doctorId);
@@ -31,10 +32,10 @@ public class BillingCRUDoperations extends DataSourceDefenition {
 		bill.setcreditCardNumber(CreditCardNo);
 		bill.setcreditCardExpiry(Expiry);
 		
-		String SQL = "select count(*) from Billing";
+		String SQL = "select MAX(BillingId) from Billing";
 		
 		int billingIndex = jdbcTemplateObject.queryForInt(SQL);
-		bill.setBillingId(billingIndex++);
+		bill.setBillingId(++billingIndex);
 		bill.setbillingAmount(new ReasonSpecializationCRUDoperations().getFees(Reason));
 		bill.setcopaymentamt(amount);
 		SQL = "insert into Billing (BillingId,StudentId,DateAdded,Amount,CreditCardNumber,CreditCardExpiry,CopaymentAmount) values (?,?,?,?,?,?,?)";
@@ -49,17 +50,17 @@ public class BillingCRUDoperations extends DataSourceDefenition {
 		return bill.getBillingId();
 	}
 	
-	public Boolean deleteBill(String BillingId)	{
+	public static Boolean deleteBill(String BillingId)	{
 
 		String SQL = "delete from Billing where BillingId = ?";
 
 		jdbcTemplateObject.update(SQL,
-				new Object[] { Integer.parseInt(BillingId) });
+				new Object[] { BillingId });
 		System.out.println("Bill Removed");
 		return true;
 	}
 
-	public Billing retrieveBill(String BillingId) {
+	public static Billing retrieveBill(String BillingId) {
 
 		String SQL = "select * from Billing where BillingId = ?";
 		Billing billing = jdbcTemplateObject.queryForObject(SQL,
