@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import mainEntities.DoctorCRUDoperations;
+import mainEntities.Student;
+import mainEntities.StudentCRUDoperations;
 import datasource.DataSourceDefenition;
 
 public class AppointmentCRUDoperations extends DataSourceDefenition {
@@ -42,7 +44,22 @@ public class AppointmentCRUDoperations extends DataSourceDefenition {
 
 		DoctorCRUDoperations dco=new DoctorCRUDoperations();
 		dco.updateAvailability(appointment.getDoctorId(), appointment.getDate(),appointment.getStartTime(),"DELETE");
-		
+		if(Reason.trim().equalsIgnoreCase("Vaccination")){
+			
+			StudentCRUDoperations stuCrudOp= new StudentCRUDoperations();
+			Student stu=stuCrudOp.getStudent(appointment.getStudentId());
+			int vaccinationCount=stu.getPendingVaccinationCount();
+			stu.setPendingVaccinationCount(vaccinationCount-1 >0?--vaccinationCount:0);
+			stuCrudOp.updateVaccinationCount(appointment.getStudentId(), stu.getPendingVaccinationCount());
+		}
+if(Reason.trim().equalsIgnoreCase("Free Physical Checkup")){
+			
+			StudentCRUDoperations stuCrudOp= new StudentCRUDoperations();
+			Student stu=stuCrudOp.getStudent(appointment.getStudentId());
+			int freePhysicalCount=stu.getFreePhysicalCount();
+			stu.setFreePhysicalCount(freePhysicalCount-1 >0?--freePhysicalCount:0);
+			stuCrudOp.updateFreePhysicalCount(appointment.getStudentId(), stu.getFreePhysicalCount());
+		}
 		
 		return appointment.getAppointmentId();
 	}
@@ -63,6 +80,22 @@ public class AppointmentCRUDoperations extends DataSourceDefenition {
 		dco.updateAvailability(appointment.getDoctorId(), appointment.getDate(),appointment.getStartTime(),"ADD");
 		if(appointment.billingId!=-1)
 		BillingCRUDoperations.deleteBill(appointment.getBillingId().toString());
+if(appointment.getReason().trim().equalsIgnoreCase("Vaccination")){
+			
+			StudentCRUDoperations stuCrudOp= new StudentCRUDoperations();
+			Student stu=stuCrudOp.getStudent(appointment.getStudentId());
+			int vaccinationCount=stu.getPendingVaccinationCount();
+			stu.setPendingVaccinationCount(vaccinationCount == 0 ?0:++vaccinationCount);
+			stuCrudOp.updateVaccinationCount(appointment.getStudentId(), stu.getPendingVaccinationCount());
+		}
+if((appointment.getReason().trim().equalsIgnoreCase("Free Physical Checkup"))){
+			
+			StudentCRUDoperations stuCrudOp= new StudentCRUDoperations();
+			Student stu=stuCrudOp.getStudent(appointment.getStudentId());
+			int freePhysicalCount=stu.getFreePhysicalCount();
+			stu.setFreePhysicalCount(freePhysicalCount==0?0:++freePhysicalCount);
+			stuCrudOp.updateFreePhysicalCount(appointment.getStudentId(), stu.getFreePhysicalCount());
+		}
 		System.out.println("Appointment Cancelled");
 		
 		return true;

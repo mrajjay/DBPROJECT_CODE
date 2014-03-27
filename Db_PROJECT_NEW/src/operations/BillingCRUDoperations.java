@@ -24,7 +24,7 @@ public class BillingCRUDoperations extends DataSourceDefenition {
 	{
 		
 		Student stu = new StudentCRUDoperations().getStudent(studentId);
-		if(stu.getDeductablePaidInFull()=="YES")return -1;
+		if(stu.getDeductablePaidInFull()=="YES"||Reason.trim().equalsIgnoreCase("Vaccination")||Reason.trim().equalsIgnoreCase("Free Physical Checkup"))return -1;
 		Billing bill = new Billing();
 		bill.setStudentId(studentId);
 		//bill.setDoctorId(doctorId);
