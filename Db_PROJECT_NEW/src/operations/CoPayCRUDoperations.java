@@ -9,8 +9,8 @@ public class CoPayCRUDoperations extends DataSourceDefenition{
 	
 	public void insertCopayDetails(String HealthInsuranceCompanyName)
 
-	{	String SQL = "select HealthInsuranceCompanyName from COPAY";
-	List<CoPay> copay = jdbcTemplateObject.query(SQL,	new CoPayMapper());
+	{	String SQL = "select * from COPAY";
+	List<CoPay> copay = jdbcTemplateObject.query(SQL,new CoPayMapper());
 	Iterator<CoPay>copayVar =copay.iterator();
 	while(copayVar.hasNext())
 	{
@@ -23,7 +23,7 @@ public class CoPayCRUDoperations extends DataSourceDefenition{
 	copayObj.setCopayAmount(Math.random() * ( 100 - 1 ));
 	
 		
-		 SQL = "insert into CoPay (HealthInsuranceCompanyName,CoPayPercentage) values (?,?)";
+		 SQL = "insert into CoPay (HEALTHINSURANCECOMPANYNAME,COPAYPERCENTAGE) values (?,?)";
 
 		jdbcTemplateObject.update(
 				SQL,

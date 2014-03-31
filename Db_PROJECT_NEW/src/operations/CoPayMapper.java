@@ -9,7 +9,7 @@ public class CoPayMapper implements RowMapper<CoPay> {
 	  public CoPay mapRow(ResultSet rs, int rowNum) throws SQLException {
 		   CoPay copay = new CoPay();
 	     
-		   copay.setHealthInsuranceCompanyName(rs.getString("HealthInsuranceCompanyName"));
+		   copay.setHealthInsuranceCompanyName(rs.getString("HEALTHINSURANCECOMPANYNAME"));
 		   copay.setCopayAmount(rs.getFloat("CoPayPercentage"));
 		 
 			

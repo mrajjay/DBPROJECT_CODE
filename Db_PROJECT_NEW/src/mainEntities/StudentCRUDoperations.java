@@ -2,6 +2,8 @@ package mainEntities;
 
 import java.util.List;
 
+import operations.CoPayCRUDoperations;
+
 import datasource.DataSourceDefenition;
 
 public class StudentCRUDoperations extends DataSourceDefenition{
@@ -27,6 +29,8 @@ public class StudentCRUDoperations extends DataSourceDefenition{
 				HealthInsuranceNumber, OutstandingPayments,HealthInsuranceCompany,DeductablePaidInFull });
 		System.out.println("Created Record Name = " + Name + " LoginId = "
 				+ LoginId);
+		CoPayCRUDoperations obj=new CoPayCRUDoperations();
+		obj.insertCopayDetails(HealthInsuranceCompany);
 		return LoginId;
 
 	}

@@ -78,5 +78,8 @@
 	<classpathentry kind="lib" path="LIBRARIES/libs/spring-websocket-4.0.2.RELEASE-javadoc.jar"/>
 	<classpathentry kind="lib" path="LIBRARIES/libs/spring-websocket-4.0.2.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="LIBRARIES/libs/spring-websocket-4.0.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="LIBRARIES/gson-2.2.4.jar"/>
+	<classpathentry kind="lib" path="LIBRARIES/jsp-api.jar"/>
+	<classpathentry kind="lib" path="LIBRARIES/servlet-api.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
